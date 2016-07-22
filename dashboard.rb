@@ -9,16 +9,21 @@ require "mechanize"
 require_relative 'dice_scraper'
 require_relative 'company_info'
 require "httparty"
+require "csv"
 
 helpers do
 
   def read_file
-    File.readlines("csv_file.csv")
+    CSV.foreach("csv_file.csv")
   end
 
   def my_response
     return HTTParty.get("http://freegeoip.net/json/99.3.66.230") if Sinatra::Base.development?
     HTTParty.get("http://freegeoip.net/json/#{request.ip}")
+  end
+
+  def data_array
+    CompanyInfo.parse_company_data
   end
 
 end
@@ -37,8 +42,8 @@ get "/jobs_list" do
     searcher = Scraper.new(params[:q], params[:l])
     searcher.write_to_csv(searcher.build_job_hash)
   end
-
+  comp_data = data_array
   jobs = read_file
 
-  erb :jobs_list, :locals => { jobs: jobs, city: city }
+  erb :jobs_list, :locals => { jobs: jobs, city: city, comp_data: comp_data }
 end

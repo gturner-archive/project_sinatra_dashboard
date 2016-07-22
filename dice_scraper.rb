@@ -6,7 +6,7 @@ class Scraper
     @job = job
     @location = location
     @agent = Mechanize.new
-    @agent.history_added = Proc.new { sleep 0.5 }
+    #@agent.history_added = Proc.new { sleep 0.5 }
     @page = @agent.get('http://www.dice.com')
     submit_form(@job, @location)
   end
@@ -89,12 +89,10 @@ class Scraper
   end
 
   def convert_time(string)
-    units = { day: 24, days: 24, week: 168, weeks: 168,
-              month: 720, months: 720 }
+    units = { hour: 1, hours: 1, minute: 1, minutes: 1, day: 24, days: 24, week: 168, weeks: 168, month: 720, months: 720 }
     units.default = 0
     num = string.split[1].to_i
     unit = string.split[2].to_sym
-    num = 0 if num.nil?
     (Time.now - units[unit] * num).to_s
   end
 

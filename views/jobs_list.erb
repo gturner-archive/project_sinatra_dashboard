@@ -2,14 +2,17 @@
 <table class="table table-striped">
   <% jobs.each do |job_line| %>
     <tr>
-      <% job_columns = job_line.split(",") %>
-      <% if job_columns.length > 8%>
-        <% job_columns[0] << job_columns[1] %>
-        <% job_columns[1] = nil %>
-        <% job_columns.compact! %>
-      <% end %>
-      <% job_columns.each do |column| %>
+      <% job_line.each do |column| %>
         <td><%= column %></td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+<table class="table table-striped">
+  <% comp_data.each do |comp| %>
+    <tr>
+      <% comp.each do |data_point| %>
+        <td><%= data_point %></td>
       <% end %>
     </tr>
   <% end %>
